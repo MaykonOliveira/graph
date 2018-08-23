@@ -4,12 +4,23 @@ class Node(object):
         self.__key = key
         self.__value = value
         self.__edges = []
+        self.__visited = False
+        self.__antecessors = []
 
     def get_key(self):
         return self.__key
 
     def get_value(self):
         return self.__value
+
+    def get_antecessors(self):
+        return self.__antecessors
+
+    def set_antecessor(self, antecessors):
+        self.__antecessors = antecessors
+
+    def update_visited(self, visited):
+        self.__visited = visited
 
     def get_edges(self):
         return self.__edges
