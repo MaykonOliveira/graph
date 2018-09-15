@@ -17,8 +17,7 @@ class Node(object):
     def add_edge(self, edge):
         self.__edges.append(edge)
 
-    def remove_edge(self, destiny_node_key):
-        for edge in self.__edges:
-            if edge.get_destiny_node() == destiny_node_key:
-                self.__edges.remove(edge)
-                return edge.get_value()
+    def remove_edge(self, edge_index):
+        value = self.__edges[edge_index].get_value()
+        self.__edges.pop(edge_index)
+        return value
