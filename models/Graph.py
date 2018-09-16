@@ -1,8 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from models.node import Node
-from models.edge import Edge
+from models.Node import Node
+from models.Edge import Edge
 
 
 class Graph(object):
@@ -77,6 +77,15 @@ class Graph(object):
             node_2_reference = self.__nodes[references[1].get("node_index")].get_key()
             print("Edge {} reference nodes {} and {}!".format(edge_key, node_1_reference, node_2_reference))
             return node_1_reference, node_2_reference
+
+    def get_nodes(self):
+        return self.__nodes
+
+    def get_node_from_key(self, node_key):
+        node_index = self._get_node_index(node_key)
+        if node_index is not None:
+            return self.__nodes[node_index]
+        return None
 
     def verify_node_is_adjacent(self, node_key_1, node_key_2):
         node_1_index = self._get_node_index(node_key_1)
