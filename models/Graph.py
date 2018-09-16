@@ -7,8 +7,10 @@ from models.Edge import Edge
 
 class Graph(object):
 
-    def __init__(self, orientation=False):
-        self.__nodes = []
+    def __init__(self, nodes=None, orientation=False):
+        if nodes is None:
+            nodes = []
+        self.__nodes = nodes
         self.__orientation = orientation
 
     def add_node(self, node_key, node_value):
@@ -45,7 +47,7 @@ class Graph(object):
             print("One of the informed nodes not exist!")
 
     def remove_edge(self, edge_key):
-        edge_references =  self._get_references_of_edge_from_key(edge_key)
+        edge_references = self._get_references_of_edge_from_key(edge_key)
         if edge_references:
             value_removed = None
             for reference in edge_references:
@@ -57,7 +59,6 @@ class Graph(object):
     def get_node_value(self, node_key):
         node_index = self._get_node_index(node_key)
         if node_index is not None:
-            print("Node {} have a value {}!".format(node_key, self.__nodes[node_index].get_value()))
             return self.__nodes[node_index].get_value()
         else:
             print("Node {} not exist!".format(node_key))
