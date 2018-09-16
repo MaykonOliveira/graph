@@ -1,4 +1,5 @@
-from models.graph import Graph
+from models.Graph import Graph
+from algorithms import SearchAlgorithms
 
 graph = Graph(orientation=False)
 
@@ -9,9 +10,7 @@ graph.add_node("D", "xundas4")
 graph.add_node("E", "xundas5")
 graph.add_node("F", "xundas6")
 
-graph.add_edge("1", "A", "B", "xundas2")
-graph.add_edge("1", "B", "A", "xundas3")
-
+graph.add_edge("1", "A", "B", "xundas")
 graph.add_edge("2", "A", "C", "xundas")
 graph.add_edge("4", "B", "C", "xundas")
 graph.add_edge("5", "B", "D", "xundas")
@@ -21,6 +20,8 @@ graph.add_edge("8", "D", "F", "xundas")
 graph.add_edge("9", "E", "F", "xundas")
 
 
-graph.get_edge_reference_nodes("5")
+search = SearchAlgorithms.Search(graph, "A", "F")
+
+print(search.breadthFirstSearch())
 
 #graph.plot_graph()
