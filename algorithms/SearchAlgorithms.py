@@ -25,3 +25,19 @@ class Search(object):
                 queue.append((destiny_node, path + [current]))
                 visited.add(destiny_node)
         return None
+
+    def depthFirstSearch(self):
+        stack = [(self._initial_node_key, [self._initial_node_key])]
+        visited = set()
+        while stack:
+            print(stack)
+            current, path = stack.pop()
+            if current in visited:
+                continue
+            if current == self._result_node_key:
+                return path
+            visited.add(current)
+            current_edges = self._graph.get_node_from_key(current).get_edges()
+            for edge in current_edges:
+                destiny_node = edge.get_destiny_node()
+                stack.append((destiny_node, path + [destiny_node]))
