@@ -10,18 +10,17 @@ graph.add_node("E", "xundas5")
 graph.add_node("F", "xundas6")
 
 graph.add_edge("1", "A", "B", "xundas2")
+graph.add_edge("1", "B", "A", "xundas3")
+
 graph.add_edge("2", "A", "C", "xundas")
 graph.add_edge("4", "B", "C", "xundas")
 graph.add_edge("5", "B", "D", "xundas")
 graph.add_edge("6", "C", "E", "xundas")
 graph.add_edge("7", "D", "E", "xundas")
 graph.add_edge("8", "D", "F", "xundas")
-graph.add_edge("8", "E", "F", "xundas")
+graph.add_edge("9", "E", "F", "xundas")
 
 
-graph.remove_edge("1")
-
-graph.get_edge_value("1")
-
+graph.get_edge_reference_nodes("5")
 
 #graph.plot_graph()
