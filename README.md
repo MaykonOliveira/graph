@@ -5,6 +5,7 @@
 ## Requisitos
 - Python 3.5
 - Python 3.5-dev
+- python3.5-tk
 - setuptools
 - VirtualEnv
 - Make
