@@ -45,7 +45,7 @@ class Graph(object):
             print("One of the informed nodes not exist!")
 
     def remove_edge(self, edge_key):
-        edge_references =  self._get_references_of_edge_from_key(edge_key)
+        edge_references = self._get_references_of_edge_from_key(edge_key)
         if edge_references:
             value_removed = None
             for reference in edge_references:
@@ -116,7 +116,7 @@ class Graph(object):
                     references.append({"node_index": node_index, "edge_index": edge_index})
         return references
 
-    def plot_graph(self, png_create=False):
+    def get_graph(self):
         if self.__orientation:
             graph = nx.DiGraph()
         else:
@@ -125,7 +125,17 @@ class Graph(object):
             graph.add_node(node.get_key())
             for edge in node.get_edges():
                 graph.add_edge(node.get_key(), edge.get_destiny_node())
+        return graph
+
+    def plot_graph(self, png_create=False, col_val=None):
+        graph = self.get_graph()
+        pos = nx.spring_layout(graph)
+
         if png_create:
             plt.savefig("graph.png")
-        nx.draw(graph)
+        if col_val:
+            values = [col_val.get(node, 'blue') for node in graph.nodes()]
+            nx.draw(graph, pos, with_labels=True, node_color=values, edge_color='black', width=1, alpha=0.7)
+        else:
+            nx.draw(graph)
         plt.show()

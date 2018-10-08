@@ -1,7 +1,9 @@
 from models.Graph import Graph
 from algorithms import SearchAlgorithms
+from algorithms import ColorAlghoritms
 
-graph = Graph(orientation=True)
+graph = Graph(orientation=False)
+color = ColorAlghoritms.Color()
 
 # graph.add_node("A", "xundas1")
 # graph.add_node("B", "xundas2")
@@ -41,9 +43,6 @@ graph.add_edge("9", "6", "8", "xundas")
 graph.add_edge("10", "7", "8", "xundas")
 graph.add_edge("11", "7", "9", "xundas")
 
+map = color.welshPowell(graph.get_graph())
 
-search = SearchAlgorithms.Search(graph, "1", "9")
-
-print(search.depthFirstSearch())
-
-#graph.plot_graph()
+graph.plot_graph(col_val=map)
