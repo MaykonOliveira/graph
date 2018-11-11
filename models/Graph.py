@@ -144,9 +144,10 @@ class Graph(object):
             plt.savefig("graph.png")
         if color_map:
             color_values = [color_map.get(node, 'blue') for node in graph.nodes()]
-            nx.draw(graph, pos, with_labels=True, node_color=color_values, edge_color='black', width=1, alpha=0.7)
         else:
-            nx.draw(graph)
+            color_values = 'r'
+
+        nx.draw(graph, pos, with_labels=True, node_color=color_values, edge_color='black', width=1, alpha=0.7)
         plt.show()
 
     def is_planar(self):

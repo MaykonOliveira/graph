@@ -1,29 +1,50 @@
+import os
+
 from models.Graph import Graph
-from algorithms import SearchAlgorithms
 from algorithms import ColorAlghoritms
 
 graph = Graph(orientation=False)
 color = ColorAlghoritms.Color()
 
-############################### Three colors graph ###############################
-graph.add_node("1", "xundas1")
-graph.add_node("2", "xundas1")
-graph.add_node("3", "xundas1")
-graph.add_node("4", "xundas1")
-graph.add_node("5", "xundas1")
+
+def print_main_menu():
+    print(30 * "-", "MENU", 30 * "-")
+    print("1. Add node")
+    print("2. Add edge")
+    print("3. Welsh Powell Apply")
+    print("4. Plot graph")
+    print("5. Exit")
+    print(67 * "-")
 
 
-graph.add_edge("1", "1", "2", 100)
-graph.add_edge("2", "1", "3", 200)
-graph.add_edge("3", "1", "4", 300)
-graph.add_edge("4", "1", "5", 400)
-graph.add_edge("5", "2", "3", 500)
-graph.add_edge("6", "2", "4", 600)
-graph.add_edge("7", "3", "5", 700)
-graph.add_edge("8", "4", "5", 800)
-##################################################################################
+loop = True
 
+while loop:
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print_main_menu()
+    choice = input("Enter your choice [1-5]: ")
 
-map = color.welsh_powell(graph)
+    if choice == '1':
+        os.system('cls' if os.name == 'nt' else 'clear')
+        id = input("Enter with the ID of the node: ")
+        value = input("Enter with the value of the node: ")
+        graph.add_node(id, value)
 
-graph.plot_graph(color_map=map)
+    elif choice == '2':
+        os.system('cls' if os.name == 'nt' else 'clear')
+        id = input("Enter with the ID of the edge: ")
+        start = input("Enter with the first node ID: ")
+        end = input("Enter with the second node ID: ")
+        weight = float(input("Enter with the weight of the edge: "))
+        graph.add_edge(id, start, end, weight)
+    elif choice == '3':
+        os.system('cls' if os.name == 'nt' else 'clear')
+        map = color.welsh_powell(graph)
+        graph.plot_graph(color_map=map)
+    elif choice == '4':
+        os.system('cls' if os.name == 'nt' else 'clear')
+        graph.plot_graph()
+    elif choice == '5':
+        loop = False
+    else:
+        input("Wrong option selection. Enter any key to try again..")
