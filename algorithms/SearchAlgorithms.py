@@ -8,7 +8,7 @@ class Search(object):
         self._initial_node_key = initial_node_key
         self._result_node_key = result_node_key
 
-    def breadthFirstSearch(self):
+    def breadth_first_search(self):
         if self._initial_node_key == self._result_node_key:
             return [self._initial_node_key]
         visited = {self._initial_node_key}
@@ -26,7 +26,7 @@ class Search(object):
                 visited.add(destiny_node)
         return None
 
-    def depthFirstSearch(self):
+    def depth_first_search(self):
         stack = [(self._initial_node_key, [self._initial_node_key])]
         visited = set()
         while stack:

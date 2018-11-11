@@ -3,19 +3,24 @@ class Color(object):
     def __init__(self):
         pass
 
-    def welshPowell(self, G):
-        node_list = sorted(G.nodes())
-        col_val = {}
-        col_val[node_list[0]] = 0
-        for node in node_list[1:]:
-            available = [True] * len(G.nodes())
-            for adj_node in G.neighbors(node):
-                if adj_node in col_val.keys():
-                    col = col_val[adj_node]
-                    available[col] = False
-            clr = 0
-            for clr in range(len(available)):
-                if available[clr]:
+    def welsh_powell(self, graph):
+        sorted_nodes = sorted(graph.get_nodes(), key=lambda x: len(x.get_edges()), reverse=True)
+        nodes_number = len(graph.get_nodes())
+        color_values = {sorted_nodes[0].get_key(): 0}
+
+        for node in sorted_nodes[1:]:
+            available_colors = [True] * nodes_number
+
+            for adjacent_node in graph.get_node_neighbors(node):
+                if adjacent_node in color_values.keys():
+                    color = color_values[adjacent_node]
+                    available_colors[color] = False
+
+            new_color = 0
+            for new_color in range(len(available_colors)):
+                if available_colors[new_color]:
                     break
-            col_val[node] = clr
-        return col_val
+            color_values[node.get_key()] = new_color
+
+        return color_values
+
