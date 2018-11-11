@@ -7,8 +7,11 @@ from models.Edge import Edge
 
 class Graph(object):
 
-    def __init__(self, orientation=False):
-        self.__nodes = []
+    def __init__(self, nodes=None, orientation=False):
+        if nodes is None:
+            nodes = []
+        self.__nodes = nodes
+        self.__edges_count = 0
         self.__orientation = orientation
 
     def add_node(self, node_key, node_value):
@@ -36,6 +39,7 @@ class Graph(object):
             if not self._get_references_of_edge_from_key(key):
                 print("Added edge {} with value {}!".format((node_key_1, node_key_2), edge_value))
                 self.__nodes[node_1_index].add_edge(Edge(key, node_key_2, edge_value))
+                self.__edges_count += 1
                 if not self.__orientation:
                     print("Added edge {} with value {}!".format((node_key_2, node_key_1), edge_value))
                     self.__nodes[node_2_index].add_edge(Edge(key, node_key_1, edge_value))
@@ -51,13 +55,13 @@ class Graph(object):
             for reference in edge_references:
                 value_removed = self.__nodes[reference.get("node_index")].remove_edge(reference.get("edge_index"))
             print("Removed edge {} with value {}!".format(edge_key, value_removed))
+            self.__edges_count -= 1
         else:
             print("Edge informed not exist!")
 
     def get_node_value(self, node_key):
         node_index = self._get_node_index(node_key)
         if node_index is not None:
-            print("Node {} have a value {}!".format(node_key, self.__nodes[node_index].get_value()))
             return self.__nodes[node_index].get_value()
         else:
             print("Node {} not exist!".format(node_key))
@@ -142,3 +146,50 @@ class Graph(object):
         else:
             nx.draw(graph)
         plt.show()
+
+    def is_planar(self):
+        result = True
+        node_count = len(self.__nodes)
+        region_count = 2 + self.__edges_count - node_count
+
+        if (node_count - self.__edges_count + region_count) == 2:
+            print("Euler test: OK")
+        else:
+            print("Euler test: FAIL")
+            result = False
+
+        if len(self.__nodes) >= 3:
+            if self._has_three_level_cicle():
+                print("This graph has a 3 level cicle!")
+                if self.__edges_count <= 3 * node_count - 6:
+                    print("Edges and Nodes Teorem: OK")
+                else:
+                    print("Edges and Nodes Teorem: FAIL")
+                    result = False
+            else:
+                print("This graph do not have a 3 level cicle!")
+                if self.__edges_count <= 2 * node_count - 4:
+                    print("Edges and Nodes Teorem: OK")
+                else:
+                    print("Edges and Nodes Teorem: FAIL")
+                    result = False
+        return result
+
+    def _get_node_by_key(self, key):
+        for node in self.__nodes:
+            if node.get_key() == key:
+                return node
+        return None
+
+    def _has_three_level_cicle(self):
+        for node in self.__nodes:
+            start_node = node
+            for edge in node.get_edges():
+                second_node = self._get_node_by_key(edge.get_destiny_node())
+                for second_edge in second_node.get_edges():
+                    third_node = self._get_node_by_key(second_edge.get_destiny_node())
+                    if third_node != start_node:
+                        for last_edge in third_node.get_edges():
+                            if self._get_node_by_key(last_edge.get_destiny_node()) == start_node:
+                                return True
+        return False
