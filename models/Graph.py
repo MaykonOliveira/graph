@@ -131,18 +131,20 @@ class Graph(object):
         for node in self.__nodes:
             graph.add_node(node.get_key())
             for edge in node.get_edges():
-                graph.add_edge(node.get_key(), edge.get_destiny_node())
+                graph.add_edge(node.get_key(), edge.get_destiny_node(), weight=edge.get_value())
         return graph
 
     def plot_graph(self, png_create=False, color_map=None):
         graph = self.get_graph()
         pos = nx.spring_layout(graph)
 
+        edge_values = nx.get_edge_attributes(graph, 'weight')
+        nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_values)
         if png_create:
             plt.savefig("graph.png")
         if color_map:
-            values = [color_map.get(node, 'blue') for node in graph.nodes()]
-            nx.draw(graph, pos, with_labels=True, node_color=values, edge_color='black', width=1, alpha=0.7)
+            color_values = [color_map.get(node, 'blue') for node in graph.nodes()]
+            nx.draw(graph, pos, with_labels=True, node_color=color_values, edge_color='black', width=1, alpha=0.7)
         else:
             nx.draw(graph)
         plt.show()
