@@ -7,7 +7,7 @@ class Prim(object):
         self._graph = graph
         self._initial_node_key = initial_node_key
 
-    def minimumSpanningTree(self):
+    def minimum_spanning_tree(self):
         minimum_graph = Graph()
         minimum_graph.add_node(self._initial_node_key, self._graph.get_node_value(self._initial_node_key))
         visited = {self._initial_node_key}
