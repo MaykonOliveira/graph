@@ -8,8 +8,6 @@ debug = False
 graph = Graph(orientation=False)
 color = ColorAlghoritms.Color()
 
-
-
 def print_main_menu():
     print(25 * "-", "Graph atributes", 24 * "-")
     print("Debug: " + ("On" if debug else "Off"))
@@ -24,7 +22,6 @@ def print_main_menu():
     print("7. Plot graph")
     print("8. Exit")
     print(67 * "-")
-
 
 loop = True
 
@@ -61,7 +58,25 @@ while loop:
     elif choice == '6':
         os.system('cls' if os.name == 'nt' else 'clear')
         floyd = Floyd(graph, debug=debug)
-        floyd.run()
+        valid_keys = [key for node in graph.get_nodes() for key in node.get_key()]
+
+        start = input("Enter the origin node ID: ")
+        end = input("Enter the destiny node ID: ")
+
+        while (start not in valid_keys) or (end not in valid_keys):
+            print("Please input valid nodes ID")
+            start = input("Enter the origin node ID: ")
+            end = input("Enter the destiny node ID: ")
+
+        minimum_distance = floyd.minimum_distance(start, end)
+        print("Minimum distance betwen Node {} and Node {}: {}".format(start, end, minimum_distance))
+
+        if minimum_distance != float("inf"):
+            minimum_path = floyd.minimum_path(start, end)
+            print("minimum path:" + str(minimum_path))
+        input("Press any key to continue")
+
+
     elif choice == '7':
         os.system('cls' if os.name == 'nt' else 'clear')
         # graph.add_node('1', '')
@@ -69,6 +84,7 @@ while loop:
         # graph.add_node('3', '')
         # graph.add_node('4', '')
         # graph.add_node('5', '')
+        # graph.add_node('6', '')
 
 
         # graph.add_edge('A', '1', '2', 2)

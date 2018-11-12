@@ -10,10 +10,49 @@ class Floyd(object):
         self.__cost_matrix = self.__new_cost_matrix()
         self.__predecessors_matrix =  self.__predecessors_matrix()
 
+        self.__final_cost_matrix = None
+        self.__final_predecessors_matrix = None
+
         if debug:
             self.__debug_log()
 
-    def run(self):
+        self.__run(self.__debug)
+
+    def minimum_distance(self, node_1_key, node_2_key):
+        node_1_index = None
+        node_2_index = None
+
+        for index, node in enumerate(self.__nodes):
+            if node.get_key() == node_1_key:
+                node_1_index = index
+            if node.get_key() == node_2_key:
+                node_2_index = index
+                
+        return self.__final_cost_matrix[node_1_index][node_2_index]
+
+    def minimum_path(self, node_1_key, node_2_key):
+        node_1_index = None
+        node_2_index = None
+        current_node_index = None
+        minimum_path = []
+
+        for index, node in enumerate(self.__nodes):
+            if node.get_key() == node_1_key:
+                node_1_index = index
+            if node.get_key() == node_2_key:
+                node_2_index = index
+
+        current_node_index = int(self.__final_predecessors_matrix[node_1_index][node_2_index] - 1)
+        minimum_path.append(node_2_index + 1)
+        minimum_path.append(current_node_index + 1)                
+
+        while (current_node_index != node_1_index ):
+            current_node_index = int(self.__final_predecessors_matrix[node_1_index][current_node_index] - 1)
+            minimum_path.append(current_node_index + 1)
+
+        return minimum_path
+
+    def __run(self, debug):
         old_cost_matrix = self.__cost_matrix
         old_predecessors_matrix = self.__predecessors_matrix 
 
@@ -35,31 +74,34 @@ class Floyd(object):
                     else:
                         new_predecessors_matrix[i][j] = old_predecessors_matrix[i][j]
             
-            old_predecessors_matrix = new_predecessors_matrix
             old_cost_matrix = new_cost_matrix
+            old_predecessors_matrix = new_predecessors_matrix
 
-            if self.__debug:
-                print("Passo: " + str(k+1))
-                print(15 * '-' + "Matriz de Custos" + 15 * '-')
+            if debug:
+                print("Step: " + str(k+1))
+                print(15 * '-' + "Cost Matrix" + 15 * '-')
                 print(new_cost_matrix)
-                print(15 * '-' + "Matriz de Predecessores" + 15 * '-')
+                print(15 * '-' + "Predecessor Matrix" + 15 * '-')
                 print(new_predecessors_matrix)
                 input("Press any key to continue")
+
+        self.__final_cost_matrix = new_cost_matrix
+        self.__final_predecessors_matrix = new_predecessors_matrix
 
     def __debug_log(self):
         print(30 * '*' + "Debug Activated" + 30 * '*')
         input("Press any key to continue")
 
-        print(15 * '-' + "Lista de Nodos" + 15 * '-')
+        print(15 * '-' + "Node List" + 15 * '-')
         for index, node in enumerate(self.__nodes):
             print("Node {}: {}".format(index, node.get_key()))
         input("Press any key to continue")
         
-        print(15 * '-' + "Matriz de Custos" + 15 * '-')
+        print(15 * '-' + "Cost Matrix" + 15 * '-')
         print(self.__cost_matrix)
         input("Press any key to continue")
 
-        print(15 * '-' + "Matriz de Predecessores" + 15 * '-')
+        print(15 * '-' + "Predecessor Matrix" + 15 * '-')
         print(self.__predecessors_matrix)
         input("Press any key to continue")
 
@@ -81,7 +123,7 @@ class Floyd(object):
         return cost_matrix
 
     def __predecessors_matrix(self):
-        predecessors_matrix = np.zeros((len(self.__nodes), len(self.__nodes)))
+        predecessors_matrix = np.zeros((len(self.__nodes), len(self.__nodes)), dtype=int)
 
         for i in range(len(self.__nodes)):
             for j in range(len(self.__nodes)):

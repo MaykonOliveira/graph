@@ -14,7 +14,6 @@ class Graph(object):
         self.__edges_count = 0
         self.__orientation = orientation
     
-
     @property
     def orientation(self):
         return self.__orientation
