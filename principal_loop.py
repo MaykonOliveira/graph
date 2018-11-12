@@ -3,6 +3,7 @@ import os
 from models.Graph import Graph
 from algorithms import ColorAlghoritms
 from algorithms.Floyd import Floyd
+from algorithms.Dijkstra import Dijkstra
 
 debug = False
 graph = Graph(orientation=False)
@@ -19,8 +20,9 @@ def print_main_menu():
     print("4. Add edge")
     print("5. Welsh Powell Apply")
     print("6. Floyd Apply")
-    print("7. Plot graph")
-    print("8. Exit")
+    print("7. Dijkstra Apply")
+    print("8. Plot graph")
+    print("9. Exit")
     print(67 * "-")
 
 loop = True
@@ -28,7 +30,7 @@ loop = True
 while loop:
     os.system('cls' if os.name == 'nt' else 'clear')
     print_main_menu()
-    choice = input("Enter your choice [1-8]: ")
+    choice = input("Enter your choice [1-9]: ")
 
     if choice == '1':
         debug = not debug
@@ -76,27 +78,37 @@ while loop:
             print("minimum path:" + str(minimum_path))
         input("Press any key to continue")
 
-
     elif choice == '7':
         os.system('cls' if os.name == 'nt' else 'clear')
-        # graph.add_node('1', '')
-        # graph.add_node('2', '')
-        # graph.add_node('3', '')
-        # graph.add_node('4', '')
-        # graph.add_node('5', '')
-        # graph.add_node('6', '')
+        if any(edge.get_value() < 0 for node in graph.get_nodes() for edge in node.get_edges()):
+            print("This graph has edge with negative value")
+        else:
+            valid_keys = [key for node in graph.get_nodes() for key in node.get_key()]
 
+            start = input("Enter the origin node ID: ")
+            end = input("Enter the destiny node ID: ")
 
-        # graph.add_edge('A', '1', '2', 2)
-        # graph.add_edge('B', '1', '3', 4)
-        # graph.add_edge('C', '2', '3', 3)
-        # graph.add_edge('D', '2', '4', 4)
-        # graph.add_edge('E', '4', '3', 5)
-        # graph.add_edge('F', '4', '5', 6)
-        # graph.add_edge('G', '5', '3', 3)
-        graph.plot_graph()
+            while (start not in valid_keys) or (end not in valid_keys):
+                print("Please input valid nodes ID")
+                start = input("Enter the origin node ID: ")
+                end = input("Enter the destiny node ID: ")
+
+            dijkstra = Dijkstra(graph, start, debug=debug)
+
+            minimum_distance = dijkstra.minimum_distance(end)
+            print("Minimum distance betwen Node {} and Node {}: {}".format(start, end, minimum_distance))
+
+            if minimum_distance != float("inf"):
+                minimum_path = dijkstra.minimum_path(end)
+                print("minimum path:" + str(minimum_path))
+
+        input("Press any key to continue")
 
     elif choice == '8':
+        os.system('cls' if os.name == 'nt' else 'clear')
+        graph.plot_graph()
+
+    elif choice == '9':
         loop = False
 
     else:
