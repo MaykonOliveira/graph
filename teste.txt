@@ -1,0 +1,34 @@
+
+#Floyd test
+graph.add_node('1', '')
+graph.add_node('2', '')
+graph.add_node('3', '')
+graph.add_node('4', '')
+graph.add_node('5', '')
+graph.add_node('6', '')
+
+graph.add_edge('A', '1', '2', 2)
+graph.add_edge('B', '1', '3', 4)
+graph.add_edge('C', '2', '3', 3)
+graph.add_edge('D', '2', '4', 4)
+graph.add_edge('E', '4', '3', 5)
+graph.add_edge('F', '4', '5', 6)
+graph.add_edge('G', '5', '3', 3)
+
+#Dijksta test
+graph.add_node('s', '')
+graph.add_node('u', '')
+graph.add_node('v', '')
+graph.add_node('x', '')
+graph.add_node('y', '')
+
+graph.add_edge('A', 's', 'u', 10)
+graph.add_edge('B', 's', 'x', 5)
+graph.add_edge('C', 'u', 'x', 2)
+graph.add_edge('D', 'x', 'u', 3)
+graph.add_edge('E', 'u', 'v', 1)
+graph.add_edge('F', 'x', 'y', 2)
+graph.add_edge('G', 'x', 'v', 9)
+graph.add_edge('H', 'y', 'v', 6)
+graph.add_edge('I', 'v', 'y', 4)
+graph.add_edge('J', 'y', 's', 7)
