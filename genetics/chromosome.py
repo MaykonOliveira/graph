@@ -36,6 +36,9 @@ class Chromosome(object):
 
     def get_genes(self):
         return self._genes
+    
+    def set_genes(self, new_genes):
+        self._genes = new_genes
 
     def get_fitness(self):
         return self._fitness

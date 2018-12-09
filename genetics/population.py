@@ -66,7 +66,53 @@ class Population(object):
     
 
     def crossover(self, crossover_rate=0.60):
-        pass
+        new_chromossomes = []
+        crossover_indexes = self._crossover_indexes(crossover_rate)
+
+        for i in range(0,len(self._crossover_indexes),2):
+            new_chromossomes.extend(self._crossover_function(crossover_indexes[i],crossover_indexes[i+1]))
+
+        for index, _ in self._population:
+            if index not in crossover_indexes:
+                new_chromossomes.append(self._population[index])
+        
+        self._population = new_chromossomes
+
+
+    def _crossover_function(self, chromosome_index_1, chromosome_index_2):
+        chromosome_1 = self._population[chromosome_index_1]
+        chromosome_2 = self._population[chromosome_index_2]
+
+        new_chromosome_1 = copy.deepcopy(chromosome_1)
+        new_chromosome_2 = copy.deepcopy(chromosome_2)
+
+        slice_pos = random.randint(0,len(chromosome_1.get_genes() - 1))
+        
+        new_genes_1 = chromosome_1.get_genes()[slice_pos:] + chromosome_2.get_genes()[:slice_pos]
+        new_genes_2 = chromosome_1.get_genes()[:slice_pos] + chromosome_2.get_genes()[slice_pos:] 
+        
+        new_chromosome_1.set_genes(new_genes_1)
+        new_chromosome_2.set_genes(new_genes_2)
+
+        return list(new_chromosome_1, new_chromosome_2)
+
+
+    def _crossover_indexes(self, crossover_rate):
+        cross_amount = round(self._population_size * crossover_rate)
+        cross_index = []
+
+        if (cross_amount % 2) != 0:
+            cross_amount -= 1
+
+        for i in range(cross_amount):
+            new_sample_index = None
+            
+            while new_sample_index in cross_index
+                new_sample_index = self._population.index(random.choice(self._population))
+                
+            cross_index.append(new_sample_index)
+
+        return cross_index
 
     
     def mutation(self, mutation_rate=0.01):
