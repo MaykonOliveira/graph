@@ -18,7 +18,6 @@ class Graph(object):
         if self._verify_node_exist(node_key):
             print("Node already exist in the graph!")
         else:
-            print("Added node {} with value {}!".format(node_key, node_value))
             self.__nodes.append(Node(node_key, node_value))
 
     def remove_node(self, node_key):
@@ -37,11 +36,9 @@ class Graph(object):
 
         if node_1_index is not None and node_2_index is not None:
             if not self._get_references_of_edge_from_key(key):
-                print("Added edge {} with value {}!".format((node_key_1, node_key_2), edge_value))
                 self.__nodes[node_1_index].add_edge(Edge(key, node_key_2, edge_value))
                 self.__edges_count += 1
                 if not self.__orientation:
-                    print("Added edge {} with value {}!".format((node_key_2, node_key_1), edge_value))
                     self.__nodes[node_2_index].add_edge(Edge(key, node_key_1, edge_value))
             else:
                 print("Edge with key {} already exist in the graph!".format(key))
@@ -99,11 +96,7 @@ class Graph(object):
         if node_1_index is not None and self._verify_node_exist(node_key_2):
             for edge in self.__nodes[node_1_index].get_edges():
                 if edge.get_destiny_node() == node_key_2:
-                    print("Node {} and {} are adjacents!".format(node_key_1, node_key_2))
                     return True
-            print("Node {} and {} are not adjacents!".format(node_key_1, node_key_2))
-        else:
-            print("One of the informed nodes not exist!")
         return False
 
     def _verify_node_exist(self, node_key):
@@ -178,7 +171,7 @@ class Graph(object):
                     result = False
         return result
 
-    def _get_node_by_key(self, key):
+    def get_node_by_key(self, key):
         for node in self.__nodes:
             if node.get_key() == key:
                 return node
@@ -188,11 +181,11 @@ class Graph(object):
         for node in self.__nodes:
             start_node = node
             for edge in node.get_edges():
-                second_node = self._get_node_by_key(edge.get_destiny_node())
+                second_node = self.get_node_by_key(edge.get_destiny_node())
                 for second_edge in second_node.get_edges():
-                    third_node = self._get_node_by_key(second_edge.get_destiny_node())
+                    third_node = self.get_node_by_key(second_edge.get_destiny_node())
                     if third_node != start_node:
                         for last_edge in third_node.get_edges():
-                            if self._get_node_by_key(last_edge.get_destiny_node()) == start_node:
+                            if self.get_node_by_key(last_edge.get_destiny_node()) == start_node:
                                 return True
         return False
