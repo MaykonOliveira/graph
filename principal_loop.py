@@ -38,6 +38,7 @@ population = Population(graph)
 population.generate_initial_population()
 
 for chromosomo in population.get_population():
-    if chromosomo.get_genes()[0] == "G":
-        print(chromosomo.get_genes(), chromosomo.get_fitness())
+    print(chromosomo.get_genes(), chromosomo.get_fitness())
+
+print(len(population.get_population()))
 

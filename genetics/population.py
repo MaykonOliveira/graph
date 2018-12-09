@@ -1,7 +1,5 @@
 from genetics.chromosome import Chromosome
 
-import signal
-
 
 class Population(object):
 
@@ -11,23 +9,14 @@ class Population(object):
         self._population_size = population_size
 
     def generate_initial_population(self):
-
-        def timeout(signum, frame):
-            raise Exception()
-
-        signal.signal(signal.SIGALRM, timeout)
-        signal.alarm(1)
         nodes = [node.get_key() for node in self._graph.get_nodes()]
         for i in range(self._population_size):
             new_chromosome = Chromosome(self._graph)
             exist = True
-            try:
-                while exist:
-                    new_chromosome.define_genes(nodes)
-                    if not self._is_in_population(new_chromosome):
-                        exist = False
-            except Exception:
-                break
+            while exist:
+                new_chromosome.define_genes(nodes)
+                if not self._is_in_population(new_chromosome):
+                    exist = False
             self._population.append(new_chromosome)
 
     def _is_in_population(self, new_chromosome):
