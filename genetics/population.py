@@ -90,18 +90,28 @@ class Population(object):
         new_chromosome_1 = copy.deepcopy(chromosome_1)
         new_chromosome_2 = copy.deepcopy(chromosome_2)
 
-        slice_pos = random.randint(0,len(chromosome_1.get_genes()) - 1)
-        
-        new_genes_1 = chromosome_1.get_genes()[slice_pos:] + chromosome_2.get_genes()[:slice_pos]
-        new_genes_2 = chromosome_1.get_genes()[:slice_pos] + chromosome_2.get_genes()[slice_pos:] 
+        slice_pos, new_genes_1, new_genes_2 = None, None, None
+
+        while slice_pos == None or (self._has_duplicate(new_genes_1) or self._has_duplicate(new_genes_2)):
+            slice_pos = random.randint(0,len(chromosome_1.get_genes()) - 1)
+            
+            new_genes_1 = chromosome_1.get_genes()[slice_pos:] + chromosome_2.get_genes()[:slice_pos]
+            new_genes_2 = chromosome_1.get_genes()[:slice_pos] + chromosome_2.get_genes()[slice_pos:] 
         
         new_chromosome_1.set_genes(new_genes_1)
         new_chromosome_2.set_genes(new_genes_2)
 
         new_chromosome_1.calculate_fitness()
         new_chromosome_2.calculate_fitness()
+        
         return [new_chromosome_1, new_chromosome_2]
-
+    
+    
+    def _has_duplicate(self, gene):
+        if len(set(gene)) == len(gene):
+            return False
+        else:
+            return True
 
     def _crossover_indexes(self, crossover_rate):
         cross_amount = round(self._population_size * crossover_rate)
