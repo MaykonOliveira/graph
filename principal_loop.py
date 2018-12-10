@@ -38,18 +38,13 @@ graph.add_edge("14", "K", "N", 60)
 population = Population(graph)
 
 population.generate_initial_population()
-print('-------Antes-------')
-for chromosomo in population.get_population():
-    print(chromosomo.get_genes(), chromosomo.get_fitness())
 
-for i in range(20):
+for i in range(1000):
     population.elitist_selection()
-    population.mutation(debug=True)
+    population.mutation()
     population.crossover()
 
-print('-------Depois-------')
-for chromosomo in population.get_population():
-    print(chromosomo.get_genes(), chromosomo.get_fitness())
-
-print(len(population.get_population()))
+    for chromosomo in population.get_population():
+        print(chromosomo.get_genes(), chromosomo.get_fitness())
+    print("Geracao: {}".format(i))
 
