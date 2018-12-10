@@ -34,7 +34,7 @@ class Population(object):
     def get_population(self):
         return self._population
 
-    def elitist_selection(self, elitist_treshold=0.75):
+    def elitist_selection(self, elitist_treshold=0.75, debug=False):
         selected_population = []
         
         for i in range(self._population_size):
@@ -44,16 +44,26 @@ class Population(object):
             while sample_1 == sample_2:
                 sample_1 = random.choice(self._population)
                 sample_2 = random.choice(self._population)
-
-            print("selecao entre {} e {}".format(sample_1.get_fitness(), sample_2.get_fitness()))
+            
+            if debug:
+                print("-"*30)
+                print("selecao entre {} e {}".format(sample_1.get_fitness(), sample_2.get_fitness()))
+            
             if r <= elitist_treshold:
                 #choose best
+                if debug:
+                    print("Vou escolher o *melhor*")
                 survivor = min((sample_1,sample_2), key=operator.methodcaller('get_fitness'))
             else:
                 #choose worst
+                if debug:
+                    print("Vou escolher o *pior*")
                 survivor = max((sample_1,sample_2), key=operator.methodcaller('get_fitness'))
-
-            print("Vencedor: {}".format(survivor.get_fitness()))
+            
+            if debug:
+                print("Vencedor: {}".format(survivor.get_fitness()))
+                print("-"*30)
+            
             selected_population.append(copy.deepcopy(survivor))
         
         self._population = selected_population
