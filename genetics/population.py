@@ -24,6 +24,7 @@ class Population(object):
                     exist = False
             self._population.append(new_chromosome)
 
+
     def _is_in_population(self, new_chromosome):
         for chromosome in self._population:
             if chromosome.get_genes() == new_chromosome.get_genes():
@@ -44,13 +45,15 @@ class Population(object):
                 sample_1 = random.choice(self._population)
                 sample_2 = random.choice(self._population)
 
-            if r =< elitist_treshold:
+            print("selecao entre {} e {}".format(sample_1.get_fitness(), sample_2.get_fitness()))
+            if r <= elitist_treshold:
                 #choose best
                 survivor = min((sample_1,sample_2), key=operator.methodcaller('get_fitness'))
             else:
                 #choose worst
                 survivor = max((sample_1,sample_2), key=operator.methodcaller('get_fitness'))
 
+            print("Vencedor: {}".format(survivor.get_fitness()))
             selected_population.append(copy.deepcopy(survivor))
         
         self._population = selected_population
@@ -60,10 +63,10 @@ class Population(object):
         new_chromossomes = []
         crossover_indexes = self._crossover_indexes(crossover_rate)
 
-        for i in range(0,len(self._crossover_indexes),2):
+        for i in range(0,len(crossover_indexes),2):
             new_chromossomes.extend(self._crossover_function(crossover_indexes[i],crossover_indexes[i+1]))
 
-        for index, _ in self._population:
+        for index, _ in enumerate(self._population):
             if index not in crossover_indexes:
                 new_chromossomes.append(self._population[index])
         
@@ -77,7 +80,7 @@ class Population(object):
         new_chromosome_1 = copy.deepcopy(chromosome_1)
         new_chromosome_2 = copy.deepcopy(chromosome_2)
 
-        slice_pos = random.randint(0,len(chromosome_1.get_genes() - 1))
+        slice_pos = random.randint(0,len(chromosome_1.get_genes()) - 1)
         
         new_genes_1 = chromosome_1.get_genes()[slice_pos:] + chromosome_2.get_genes()[:slice_pos]
         new_genes_2 = chromosome_1.get_genes()[:slice_pos] + chromosome_2.get_genes()[slice_pos:] 
@@ -85,7 +88,9 @@ class Population(object):
         new_chromosome_1.set_genes(new_genes_1)
         new_chromosome_2.set_genes(new_genes_2)
 
-        return list(new_chromosome_1, new_chromosome_2)
+        new_chromosome_1.calculate_fitness()
+        new_chromosome_2.calculate_fitness()
+        return [new_chromosome_1, new_chromosome_2]
 
 
     def _crossover_indexes(self, crossover_rate):
@@ -98,7 +103,7 @@ class Population(object):
         for i in range(cross_amount):
             new_sample_index = None
             
-            while new_sample_index in cross_index
+            while (new_sample_index == None) or (new_sample_index in cross_index):
                 new_sample_index = self._population.index(random.choice(self._population))
                 
             cross_index.append(new_sample_index)
@@ -106,18 +111,29 @@ class Population(object):
         return cross_index
 
     
-    def mutation(self, mutation_rate=0.01):
+    def mutation(self, mutation_rate=0.01, debug=False):
         for chromosome in self._population:
             for index, gene in enumerate(chromosome.get_genes()):
+                
                 r = round(random.uniform(0, 100.0), 3)
                 rand_gene_index = None
 
                 if r <= mutation_rate:
-                    while rand_gene_index == index:
-                        rand_gene_index = random.randint(0, len(chromosome.get_genes())
+                    while (rand_gene_index == None) or (rand_gene_index == index):
+                        rand_gene_index = random.randint(0, len(chromosome.get_genes()) - 1)
 
-                    self._swap(gene[index], gene[rand_gene_index]) 
+                    if(debug):
+                        print("-"*30)
+                        print("posicoes que serao trocaradas: {}, {}".format(index, rand_gene_index))
+                        print("Cromossomo antes: {}".format(chromosome.get_genes()))
+                        print("Fitness antes: {}".format(chromosome.get_fitness()))
+                    self._swap(chromosome.get_genes(),index, rand_gene_index)
+                   
+                    chromosome.calculate_fitness()
+                    if(debug):
+                        print("Cromossomo depois: {}".format(chromosome.get_genes()))
+                        print("Fitness depois: {}".format(chromosome.get_fitness()))
+                        print("-"*30)
 
-
-    def _swap(item_1, item_2):
-        item_1, item_2 = item_2, item_1
+    def _swap(self, chromossome, index_1, index_2):
+        chromossome[index_1], chromossome[index_2] = chromossome[index_2], chromossome[index_1]

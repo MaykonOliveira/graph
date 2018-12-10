@@ -1,6 +1,8 @@
 from models.Graph import Graph
 from genetics.population import Population
 
+from genetics.chromosome import Chromosome
+
 graph = Graph(orientation=False)
 
 graph.add_node("E", None)
@@ -36,7 +38,16 @@ graph.add_edge("14", "K", "N", 60)
 population = Population(graph)
 
 population.generate_initial_population()
+print('-------Antes-------')
+for chromosomo in population.get_population():
+    print(chromosomo.get_genes(), chromosomo.get_fitness())
 
+for i in range(20):
+    population.elitist_selection()
+    population.mutation(debug=True)
+    population.crossover()
+
+print('-------Depois-------')
 for chromosomo in population.get_population():
     print(chromosomo.get_genes(), chromosomo.get_fitness())
 
