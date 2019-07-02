@@ -13,6 +13,21 @@ class Graph(object):
         self.__nodes = nodes
         self.__edges_count = 0
         self.__orientation = orientation
+    
+    @property
+    def orientation(self):
+        return self.__orientation
+        
+    @orientation.setter
+    def orientation(self, new_value):
+        self.__orientation = new_value
+
+    def exist_edge(self, source_node_key, destiny_node_key):
+        for node in self.__nodes:
+            for edge in node.get_edges():
+                if(node.get_key() == source_node_key) and (edge.get_destiny_node() == destiny_node_key):
+                    return edge
+        return None
 
     def add_node(self, node_key, node_value):
         if self._verify_node_exist(node_key):
